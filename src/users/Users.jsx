@@ -1,18 +1,18 @@
 import { useEffect, useState } from "react";
-import axiosClient from "../utils/axiosClient";
 import { Link } from "react-router-dom";
+import axiosClient from "../utils/axiosClient";
 import moment from "moment";
 
-const Patients = () => {
-  const [patients, setPatients] = useState([]);
+const Users = () => {
+  const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const getPatients = async () => {
+  const getUsers = async () => {
     setLoading(true);
 
     try {
-      const res = await axiosClient.get("/patients");
-      setPatients(res.data.data);
+      const res = await axiosClient.get("/users");
+      setUsers(res.data.data);
     } catch (err) {
       if (err.code === "ERR_BAD_RESPONSE") {
         toast.error("Internal Server Error");
@@ -25,15 +25,16 @@ const Patients = () => {
   };
 
   useEffect(() => {
-    getPatients();
+    getUsers();
   }, []);
+
   return (
     <div className="app-body">
       <div className="row">
         <div className="col-xxl-12">
           <div className="card shadow mb-4">
             <div className="card-header">
-              <h5 className="card-title">Patients</h5>
+              <h5 className="card-title">Users</h5>
             </div>
             {loading ? (
               <div className="card">
@@ -48,11 +49,11 @@ const Patients = () => {
                 <div className="col-xxl-12">
                   <div className="d-flex flex-wrap mb-2 gap-2 justify-content-end">
                     <Link
-                      to={"/super/patients/create"}
+                      to={"/super/users/create"}
                       type="button"
                       className="btn btn-outline-success"
                     >
-                      Add New Patient
+                      Add New User
                     </Link>
                   </div>
                   <div className="card shadow mb-4">
@@ -61,42 +62,34 @@ const Patients = () => {
                         <table className="table table-striped m-0">
                           <thead>
                             <tr>
-                              <th>Patient Number</th>
-                              <th>First Name</th>
-                              <th>National ID</th>
-                              <th>D.O.B</th>
-                              <th>Gender</th>
-                              <th>Phone</th>
+                              <th>Full Name</th>
+                              <th>Username</th>
                               <th>Email</th>
-                              <th>Joined On</th>
-                              <th>Action</th>
+                              <th>Role</th>
+                              <th>Created On</th>
+                              <th>Actions</th>
                             </tr>
                           </thead>
                           <tbody>
-                            {patients.map((patient, index) => {
+                            {users.map((user) => {
                               return (
                                 <tr>
-                                  <td>{index + 1}</td>
-                                  <td>{patient.name}</td>
-                                  <td>{patient.national_id}</td>
-                                  <td>{moment(patient.dob).format("ll")}</td>
-                                  <td>{patient.gender}</td>
-                                  <td>{patient.phone}</td>
-                                  <td>{patient.email}</td>
-                                  <td>
-                                    {moment(patient.createdAt).format("ll")}
-                                  </td>
+                                  <td>{user.name}</td>
+                                  <td>{user.username}</td>
+                                  <td>{user.email}</td>
+                                  <td>{user.role}</td>
+                                  <td>{moment(user.createdAt).format("ll")}</td>
                                   <td>
                                     <div className="d-flex flex-wrap justify-content-around">
                                       <Link
-                                        to={`/super/patients/${patient._id}`}
+                                        to={`/super/users/${user._id}`}
                                         type="button"
                                         className="border border-primary bg-primary text-white px-1 rounded-2"
                                       >
                                         View
                                       </Link>
                                       <Link
-                                        to={`/super/patients/update/${patient._id}`}
+                                        to={`/super/users/update/${user._id}`}
                                         type="button"
                                         className="border border-success bg-success text-white px-1 rounded-2"
                                       >
@@ -170,4 +163,4 @@ const Patients = () => {
   );
 };
 
-export default Patients;
+export default Users;
