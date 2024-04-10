@@ -89,7 +89,7 @@ const Users = () => {
                                         View
                                       </Link>
                                       <Link
-                                        to={`/super/users/update/${user._id}`}
+                                        to={`/super/users/edit/${user._id}`}
                                         type="button"
                                         className="border border-success bg-success text-white px-1 rounded-2"
                                       >

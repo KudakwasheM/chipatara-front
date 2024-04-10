@@ -15,9 +15,7 @@ const SideBar = ({ currentUser }) => {
           className="profile-thumb rounded-circle p-2 d-lg-flex d-none"
           alt="Logo"
         /> */}
-        <h5 className="profile-name lh-lg mt-2 text-truncate">
-          {currentUser.name}
-        </h5>
+        <h5 className="profile-name lh-lg">{currentUser.name}</h5>
         <hr />
       </div>
       <div className="sidebarMenuScroll">

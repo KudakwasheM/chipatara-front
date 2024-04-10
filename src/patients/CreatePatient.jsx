@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 import axiosClient from "../utils/axiosClient";
@@ -31,6 +31,17 @@ const CreatePatient = () => {
     }
   };
 
+  const removeMedication = (index) => {
+    setPatient((prevPatient) => {
+      const updatedMedications = [...prevPatient.medications];
+      updatedMedications.splice(index, 1);
+      return {
+        ...prevPatient,
+        medications: updatedMedications,
+      };
+    });
+  };
+
   const pushAllergy = () => {
     if (allergy.trim() !== "") {
       setPatient((prevPatient) => ({
@@ -39,6 +50,17 @@ const CreatePatient = () => {
       }));
       setAllergy("");
     }
+  };
+
+  const removeAllergy = (index) => {
+    setPatient((prevPatient) => {
+      const updatedAllergies = [...prevPatient.allergies];
+      updatedAllergies.splice(index, 1);
+      return {
+        ...prevPatient,
+        allergies: updatedAllergies,
+      };
+    });
   };
 
   const addPatient = async (e) => {
@@ -68,15 +90,14 @@ const CreatePatient = () => {
     }
 
     setLoading(true);
-    patient.phone = `+263${patient.phone}`;
-    console.log(patient);
     try {
       const res = await axiosClient.post("/patients", patient);
       toast.success("Successfully created patient");
       navigate("/super/patients");
     } catch (err) {
+      console.log(err);
       if (err.code === "ERR_BAD_RESPONSE") {
-        toast.error("Internal Server Error");
+        toast.error(err.response.data.error);
       } else {
         console.log(err);
         toast.error("An error occured");
@@ -85,6 +106,10 @@ const CreatePatient = () => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    console.log(patient);
+  }, [patient]);
   return (
     <div className="app-body">
       <div className="row">
@@ -132,40 +157,33 @@ const CreatePatient = () => {
                 <div className="col-lg-6 col-sm-6 col-12">
                   <div className="mb-3">
                     <label className="form-label">D.O.B</label>
-                    <div className="input-group">
-                      <input
-                        type="date"
-                        className="form-control datepicker"
-                        onChange={(e) =>
-                          setPatient((newPatient) => ({
-                            ...newPatient,
-                            dob: e.target.value,
-                          }))
-                        }
-                      />
-                      <span className="input-group-text">
-                        <i className="bi bi-calendar4"></i>
-                      </span>
-                    </div>
+                    <input
+                      type="date"
+                      className="form-control datepicker"
+                      onChange={(e) =>
+                        setPatient((newPatient) => ({
+                          ...newPatient,
+                          dob: e.target.value,
+                        }))
+                      }
+                    />
                   </div>
                 </div>
                 <div className="col-lg-6 col-sm-6 col-12">
                   <div className="mb-3">
                     <label className="form-label">Phone</label>
-                    <div className="input-group">
-                      <span className="input-group-text">+263</span>
-                      <input
-                        type="text"
-                        className="form-control"
-                        placeholder="Enter phone number"
-                        onChange={(e) =>
-                          setPatient((newPatient) => ({
-                            ...newPatient,
-                            phone: e.target.value,
-                          }))
-                        }
-                      />
-                    </div>
+
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="Enter phone number (+263777492142)"
+                      onChange={(e) =>
+                        setPatient((newPatient) => ({
+                          ...newPatient,
+                          phone: e.target.value,
+                        }))
+                      }
+                    />
                   </div>
                 </div>
               </div>
@@ -216,6 +234,7 @@ const CreatePatient = () => {
                       <textarea
                         className="form-control"
                         rows="3"
+                        placeholder="Enter address"
                         onChange={(e) =>
                           setPatient((newPatient) => ({
                             ...newPatient,
@@ -232,12 +251,28 @@ const CreatePatient = () => {
                   <div className="row">
                     <div className="col-lg-6">
                       <h5 className="">Medication</h5>
-                      {patient.medications.length > 0 ? (
-                        <ul>
-                          {patient.medications.map((medication, index) => (
-                            <li key={index}>{medication}</li>
-                          ))}
-                        </ul>
+                      {patient.medications ? (
+                        <>
+                          {patient.medications.length > 0 ? (
+                            <ul>
+                              {patient.medications.map((medication, index) => (
+                                <li key={index}>
+                                  {medication}
+                                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                  <span
+                                    type="button"
+                                    className="text-danger"
+                                    onClick={() => removeMedication(index)}
+                                  >
+                                    X
+                                  </span>
+                                </li>
+                              ))}
+                            </ul>
+                          ) : (
+                            <></>
+                          )}
+                        </>
                       ) : (
                         <></>
                       )}
@@ -267,12 +302,28 @@ const CreatePatient = () => {
 
                     <div className="col-lg-6">
                       <h5 className="">Allergy</h5>
-                      {patient.allergies.length > 0 ? (
-                        <ul>
-                          {patient.allergies.map((allergy, index) => (
-                            <li key={index}>{allergy}</li>
-                          ))}
-                        </ul>
+                      {patient.allergies ? (
+                        <>
+                          {patient.allergies.length > 0 ? (
+                            <ul>
+                              {patient.allergies.map((allergy, index) => (
+                                <li key={index}>
+                                  {allergy}
+                                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                  <span
+                                    type="button"
+                                    className="text-danger"
+                                    onClick={() => removeAllergy(index)}
+                                  >
+                                    X
+                                  </span>
+                                </li>
+                              ))}
+                            </ul>
+                          ) : (
+                            <></>
+                          )}
+                        </>
                       ) : (
                         <></>
                       )}

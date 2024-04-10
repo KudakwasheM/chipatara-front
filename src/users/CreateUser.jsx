@@ -130,7 +130,7 @@ const CreateUser = () => {
                         }))
                       }
                     >
-                      <option value="" disabled>
+                      <option value="" selected disabled>
                         ---Select ---
                       </option>
                       <option value="doctor">Doctor</option>
@@ -181,7 +181,8 @@ const CreateUser = () => {
                 </button>
                 <button
                   type="button"
-                  className="btn btn-primary"
+                  className={loading ? "btn btn-light" : "btn btn-primary"}
+                  disabled={loading}
                   onClick={addUser}
                 >
                   Submit

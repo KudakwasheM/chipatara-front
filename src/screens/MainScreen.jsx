@@ -8,25 +8,6 @@ import { ToastContainer } from "react-toastify";
 const MainScreen = () => {
   const { userInfo } = useSelector((state) => state.auth);
 
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    console.log("Hello");
-    if (userInfo) {
-      let role = userInfo.role;
-      switch (role) {
-        case "super":
-          navigate("/super");
-          break;
-        default:
-          navigate("/");
-          break;
-      }
-    } else {
-      navigate("/");
-    }
-  }, []);
-
   return (
     <div className="page-wrapper">
       <div className="main-container">

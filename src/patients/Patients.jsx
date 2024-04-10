@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axiosClient from "../utils/axiosClient";
 import { Link } from "react-router-dom";
 import moment from "moment";
+import { toast } from "react-toastify";
 
 const Patients = () => {
   const [patients, setPatients] = useState([]);
@@ -68,7 +69,7 @@ const Patients = () => {
                               <th>Gender</th>
                               <th>Phone</th>
                               <th>Email</th>
-                              <th>Joined On</th>
+                              {/* <th>Joined On</th> */}
                               <th>Action</th>
                             </tr>
                           </thead>
@@ -83,9 +84,9 @@ const Patients = () => {
                                   <td>{patient.gender}</td>
                                   <td>{patient.phone}</td>
                                   <td>{patient.email}</td>
-                                  <td>
+                                  {/* <td>
                                     {moment(patient.createdAt).format("ll")}
-                                  </td>
+                                  </td> */}
                                   <td>
                                     <div className="d-flex flex-wrap justify-content-around">
                                       <Link
@@ -96,7 +97,7 @@ const Patients = () => {
                                         View
                                       </Link>
                                       <Link
-                                        to={`/super/patients/update/${patient._id}`}
+                                        to={`/super/patients/edit/${patient._id}`}
                                         type="button"
                                         className="border border-success bg-success text-white px-1 rounded-2"
                                       >
