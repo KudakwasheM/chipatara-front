@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axiosClient from "../utils/axiosClient";
 import { useParams } from "react-router";
 import { toast } from "react-toastify";
+import CustomLoader from "../components/CustomLoader";
 
 const CreateVisit = () => {
   const { patientId } = useParams();
@@ -93,13 +94,7 @@ const CreateVisit = () => {
               <h5 className="card-title">Create New Visit</h5>
             </div>
             {loading ? (
-              <div className="card">
-                <div className="card-body">
-                  <div className="d-flex flex-wrap mb-2 gap-2 justify-content-center">
-                    <h5>Loading...</h5>
-                  </div>
-                </div>
-              </div>
+              <CustomLoader />
             ) : (
               <>
                 <div className="card-body">

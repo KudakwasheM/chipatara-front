@@ -15,49 +15,53 @@ const SideBar = ({ currentUser }) => {
           className="profile-thumb rounded-circle p-2 d-lg-flex d-none"
           alt="Logo"
         /> */}
-        <h5 className="profile-name lh-lg">{currentUser.name}</h5>
+        {currentUser && (
+          <h5 className="profile-name lh-lg">{currentUser.name}</h5>
+        )}
         <hr />
       </div>
-      <div className="sidebarMenuScroll">
-        <ul className="sidebar-menu">
-          <li className="active current-page">
-            <Link to={""}>
-              <i className="bi bi-pie-chart"></i>
-              <span className="menu-text">Dashboard</span>
-            </Link>
-          </li>
-          <li>
-            <Link to={"/super/patients"}>
-              <i className="bi bi-box"></i>
-              <span className="menu-text">Patients</span>
-            </Link>
-          </li>
-          <li>
-            <Link to={"/super/visits"}>
-              <i className="bi bi-box"></i>
-              <span className="menu-text">Visits</span>
-            </Link>
-          </li>
-          <li>
-            <Link to={"/super/billings"}>
-              <i className="bi bi-box"></i>
-              <span className="menu-text">Billing</span>
-            </Link>
-          </li>
-          <li>
-            <Link to={""}>
-              <i className="bi bi-box"></i>
-              <span className="menu-text">Payments</span>
-            </Link>
-          </li>
-          <li>
-            <Link to={"/super/users"}>
-              <i className="bi bi-box"></i>
-              <span className="menu-text">Users</span>
-            </Link>
-          </li>
-        </ul>
-      </div>
+      {currentUser && (
+        <div className="sidebarMenuScroll">
+          <ul className="sidebar-menu">
+            <li className="active current-page">
+              <Link to={""}>
+                <i className="bi bi-pie-chart"></i>
+                <span className="menu-text">Dashboard</span>
+              </Link>
+            </li>
+            <li>
+              <Link to={`/${currentUser.role}/patients`}>
+                <i className="bi bi-box"></i>
+                <span className="menu-text">Patients</span>
+              </Link>
+            </li>
+            <li>
+              <Link to={`/${currentUser.role}/visits`}>
+                <i className="bi bi-box"></i>
+                <span className="menu-text">Visits</span>
+              </Link>
+            </li>
+            <li>
+              <Link to={`/${currentUser.role}/billings`}>
+                <i className="bi bi-box"></i>
+                <span className="menu-text">Billing</span>
+              </Link>
+            </li>
+            <li>
+              <Link to={``}>
+                <i className="bi bi-box"></i>
+                <span className="menu-text">Payments</span>
+              </Link>
+            </li>
+            <li>
+              <Link to={`/${currentUser.role}/users`}>
+                <i className="bi bi-box"></i>
+                <span className="menu-text">Users</span>
+              </Link>
+            </li>
+          </ul>
+        </div>
+      )}
     </nav>
   );
 };

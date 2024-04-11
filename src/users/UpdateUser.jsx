@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import axiosClient from "../utils/axiosClient";
 import { toast } from "react-toastify";
+import CustomLoader from "../components/CustomLoader";
 
 const UpdateUser = () => {
   const { id } = useParams();
@@ -78,13 +79,7 @@ const UpdateUser = () => {
               <h5 className="card-title">Update {user.name}</h5>
             </div>
             {loading ? (
-              <div className="card">
-                <div className="card-body">
-                  <div className="d-flex flex-wrap mb-2 gap-2 justify-content-center">
-                    <h5>Loading...</h5>
-                  </div>
-                </div>
-              </div>
+              <CustomLoader />
             ) : (
               <>
                 <div className="card-body">

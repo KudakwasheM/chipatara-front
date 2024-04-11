@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router";
 import axiosClient from "../utils/axiosClient";
 import moment from "moment";
 import { toast } from "react-toastify";
+import CustomLoader from "../components/CustomLoader";
 
 const UpdatePatient = () => {
   const { id } = useParams();
@@ -126,13 +127,7 @@ const UpdatePatient = () => {
               <h5 className="card-title">Create New Patient</h5>
             </div>
             {loading ? (
-              <div className="card">
-                <div className="card-body">
-                  <div className="d-flex flex-wrap mb-2 gap-2 justify-content-center">
-                    <h5>Loading...</h5>
-                  </div>
-                </div>
-              </div>
+              <CustomLoader />
             ) : (
               <>
                 <div className="card-body">

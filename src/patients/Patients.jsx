@@ -3,6 +3,7 @@ import axiosClient from "../utils/axiosClient";
 import { Link } from "react-router-dom";
 import moment from "moment";
 import { toast } from "react-toastify";
+import CustomLoader from "../components/CustomLoader";
 
 const Patients = () => {
   const [patients, setPatients] = useState([]);
@@ -37,13 +38,7 @@ const Patients = () => {
               <h5 className="card-title">Patients</h5>
             </div>
             {loading ? (
-              <div className="card">
-                <div className="card-body">
-                  <div className="d-flex flex-wrap mb-2 gap-2 justify-content-center">
-                    <h5>Loading...</h5>
-                  </div>
-                </div>
-              </div>
+              <CustomLoader />
             ) : (
               <div className="card-body">
                 <div className="col-xxl-12">

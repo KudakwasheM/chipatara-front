@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axiosClient from "../utils/axiosClient";
 import moment from "moment";
+import CustomLoader from "../components/CustomLoader";
 
 const Visits = () => {
   const [visits, setVisits] = useState([]);
@@ -37,13 +38,7 @@ const Visits = () => {
               <h5 className="card-title">Visits</h5>
             </div>
             {loading ? (
-              <div className="card">
-                <div className="card-body">
-                  <div className="d-flex flex-wrap mb-2 gap-2 justify-content-center">
-                    <h5>Loading...</h5>
-                  </div>
-                </div>
-              </div>
+              <CustomLoader />
             ) : (
               <div className="card-body">
                 <div className="col-xxl-12">

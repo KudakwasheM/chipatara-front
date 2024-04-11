@@ -55,6 +55,7 @@ const Billings = () => {
                         <thead>
                           <tr>
                             <th>Bill Number</th>
+                            <th>Bill Currency</th>
                             <th>Bill Amount</th>
                             <th>Bill Status</th>
                             <th>Paid Amount</th>
@@ -68,6 +69,52 @@ const Billings = () => {
                             return (
                               <tr>
                                 <td>{bill.bill_number}</td>
+                                <td>{bill.currency}1</td>
+                                <td className="text-center">{bill.total}</td>
+                                {bill.payment_status === "outstanding" ? (
+                                  <td>
+                                    <span className="badge border border-danger text-danger">
+                                      Outstanding
+                                    </span>
+                                  </td>
+                                ) : (
+                                  <td>
+                                    <span className="badge border border-success text-success">
+                                      Paid
+                                    </span>
+                                  </td>
+                                )}
+                                <td className="text-center">
+                                  {bill.amount_paid}
+                                </td>
+                                <td className="text-center">
+                                  {bill.amount_due}
+                                </td>
+                                <td></td>
+                                <td>
+                                  <div className="d-flex flex-wrap justify-content-around">
+                                    <Link
+                                      to={`/super/billings/${bill._id}`}
+                                      type="button"
+                                      className="btn btn-outline-primary"
+                                    >
+                                      <i className="bi bi-eye m-0"></i>
+                                    </Link>
+                                    <Link
+                                      to={`/super/billings/edit/${bill._id}`}
+                                      type="button"
+                                      className="btn btn-outline-success"
+                                    >
+                                      <i className="bi bi-pencil m-0"></i>
+                                    </Link>
+                                    <button
+                                      type="button"
+                                      className="btn btn-outline-danger"
+                                    >
+                                      <i className="bi bi-trash m-0"></i>
+                                    </button>
+                                  </div>
+                                </td>
                               </tr>
                             );
                           })}

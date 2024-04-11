@@ -23,6 +23,7 @@ import Patient from "./patients/Patient.jsx";
 import Visit from "./visits/Visit.jsx";
 import CreateVisit from "./visits/CreateVisit.jsx";
 import UpdateVisit from "./visits/UpdateVisit.jsx";
+import CreateBill from "./billing/CreateBill.jsx";
 
 const router = createBrowserRouter([
   {
@@ -49,6 +50,7 @@ const router = createBrowserRouter([
       { path: "/super/visits/create/:patientId", element: <CreateVisit /> },
       { path: "/super/visits/edit/:id", element: <UpdateVisit /> },
       { path: "/super/billings", element: <Billings /> },
+      { path: "/super/billings/create", element: <CreateBill /> },
       { path: "/super/users", element: <Users /> },
       { path: "/super/users/:id", element: <User /> },
       { path: "/super/users/create", element: <CreateUser /> },
