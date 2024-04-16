@@ -29,10 +29,19 @@ const Login = () => {
 
   useEffect(() => {
     if (userInfo) {
-      let role = userInfo.role;
+      const role = userInfo.role;
       switch (role) {
         case "super":
           navigate("/super");
+          break;
+        case "admin":
+          navigate("/admin");
+          break;
+        case "doctor":
+          navigate("/doctor");
+          break;
+        case "nurse":
+          navigate("/nurse");
           break;
         default:
           navigate("/");

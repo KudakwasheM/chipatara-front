@@ -11,29 +11,10 @@ const MainScreen = () => {
   const { userInfo } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    if (userInfo) {
-      let role = userInfo.role;
-      switch (role) {
-        case "super":
-          navigate("/super");
-          break;
-        case "admin":
-          navigate("/admin");
-          break;
-        case "doctor":
-          navigate("/doctor");
-          break;
-        case "nurse":
-          navigate("/nurse");
-          break;
-        default:
-          navigate("/");
-          break;
-      }
-    } else {
+    if (!userInfo) {
       navigate("/");
     }
-  }, [userInfo, navigate]);
+  }, []);
 
   return (
     <div className="page-wrapper">

@@ -1,17 +1,13 @@
 import React, { useEffect, useState } from "react";
 import axiosClient from "../utils/axiosClient";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import CustomLoader from "../components/CustomLoader";
 
-const CreateBill = () => {
-  const [bill, setBill] = useState({
-    patient: "",
-    currency: "",
-    draft: false,
-    services_medicine: [],
-  });
+const UpdateBill = () => {
+  const { id } = useParams();
+  const [bill, setBill] = useState({});
   const [patients, setPatients] = useState([]);
   const [services, setServices] = useState([]);
   const [name, setName] = useState("");
@@ -21,13 +17,30 @@ const CreateBill = () => {
   const [rows, setRows] = useState([]);
   const [amount, setAmount] = useState(0);
   const [total, setTotal] = useState(0);
-  const [darft, setDraft] = useState(false);
-  const [editableRows, setEditableRows] = useState([]);
+  const [done, setDone] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
   const { userInfo } = useSelector((state) => state.auth);
+
+  const getBill = async () => {
+    setLoading(true);
+
+    try {
+      const res = await axiosClient.get(`/billings/${id}`);
+      setBill(res.data.data);
+      setRows(res.data.data.services_medicine);
+    } catch (err) {
+      if (err.code === "ERR_BAD_RESPONSE") {
+        toast.error("Internal Server Error");
+      } else {
+        toast.error("An error occured");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const getPatients = async () => {
     setLoading(true);
@@ -68,27 +81,15 @@ const CreateBill = () => {
   };
 
   const handleAddRow = () => {
-    if (name === "") {
-      toast.warning("Please add service");
-      return;
-    } else if (quantity === 0) {
-      toast.warning("Please add quantity");
-      return;
-    }
+    setRows((prevRows) => {
+      let allRows = [
+        ...prevRows,
+        { name, quantity, unit_size, unit_price, amount },
+      ];
+      setTotal(calculateTotalAmount(allRows));
+      return allRows;
+    });
 
-    const newRow = {
-      name,
-      quantity,
-      unit_size,
-      unit_price,
-      amount,
-    };
-
-    const updatedRows = [...rows, newRow];
-    const updatedTotal = calculateTotalAmount(updatedRows);
-
-    setRows(updatedRows);
-    setTotal(updatedTotal);
     setName("");
     setQuantity(0);
     setPrice("");
@@ -104,7 +105,7 @@ const CreateBill = () => {
     });
   };
 
-  const addBill = async (draft) => {
+  const updateBill = async (draft) => {
     setLoading(true);
 
     try {
@@ -114,10 +115,11 @@ const CreateBill = () => {
       } else {
         updatedBill = { ...bill, draft: false };
       }
-      const res = await axiosClient.post("/billings", updatedBill);
+
+      const res = axiosClient.put(`/billings/${id}`, updatedBill);
       toast.success("Successfully created bill");
       navigate(`/${userInfo.role}/billings`);
-    } catch (error) {
+    } catch (err) {
       if (err.code === "ERR_BAD_RESPONSE") {
         toast.error("Internal Server Error");
       } else {
@@ -129,6 +131,7 @@ const CreateBill = () => {
   };
 
   useEffect(() => {
+    getBill();
     getPatients();
     getServices();
   }, []);
@@ -146,7 +149,7 @@ const CreateBill = () => {
         <div className="col-xxl-12">
           <div className="card shadow mb-4">
             <div className="card-header">
-              <h5 className="card-title">Create New Bill</h5>
+              <h5 className="card-title">Update Bill {bill.bill_number}</h5>
             </div>
             {loading ? (
               <CustomLoader />
@@ -158,6 +161,7 @@ const CreateBill = () => {
                       <label className="form-label">Patient Name</label>
                       <select
                         className="form-select"
+                        // value={bill.patient.name}
                         onChange={(e) =>
                           setBill((newBill) => ({
                             ...newBill,
@@ -181,6 +185,7 @@ const CreateBill = () => {
                       <label className="form-label">Currency</label>
                       <select
                         className="form-select"
+                        value={bill.currency}
                         onChange={(e) =>
                           setBill((newBill) => ({
                             ...newBill,
@@ -434,13 +439,16 @@ const CreateBill = () => {
                   </div>
                   <div className="col-12">
                     <div className="text-end">
-                      <button className="btn btn-outline-danger ms-1">
+                      <button
+                        className="btn btn-outline-danger"
+                        onClick={() => navigate(-1)}
+                      >
                         Cancel
                       </button>
                       <button
                         className="btn btn-outline-success ms-1"
                         onClick={() => {
-                          addBill(true);
+                          updateBill(true);
                         }}
                       >
                         Save as Draft
@@ -448,7 +456,7 @@ const CreateBill = () => {
                       <button
                         className="btn btn-success ms-1"
                         onClick={() => {
-                          addBill(false);
+                          updateBill(false);
                         }}
                       >
                         Create Invoice
@@ -465,4 +473,4 @@ const CreateBill = () => {
   );
 };
 
-export default CreateBill;
+export default UpdateBill;
