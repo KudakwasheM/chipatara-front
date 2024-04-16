@@ -19,12 +19,20 @@ const Login = () => {
     e.preventDefault();
     setLoading(true);
 
-    await axiosClient.post("/auth/login", { email, password }).then((res) => {
-      setLoading(false);
-      dispatch(setCredentials(res.data));
-      navigate("/super");
+    try {
+      const res = await axiosClient.post("/auth/login", { email, password });
       console.log(res);
-    });
+      dispatch(setCredentials(res.data));
+    } catch (err) {
+      console.log(err);
+      if (err.code === "ERR_BAD_RESPONSE") {
+        toast.error("Internal Server Error");
+      } else {
+        toast.error("An error occured");
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -106,6 +114,7 @@ const Login = () => {
               <div className="d-grid py-3 mt-4">
                 <button
                   type="submit"
+                  disabled={loading}
                   className="btn btn-lg btn-primary"
                   onClick={login}
                 >

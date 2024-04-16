@@ -26,6 +26,8 @@ import UpdateVisit from "./visits/UpdateVisit.jsx";
 import CreateBill from "./billing/CreateBill.jsx";
 import UpdateBill from "./billing/UpdateBill.jsx";
 import Bill from "./billing/Bill.jsx";
+import Payments from "./payments/Payments.jsx";
+import CreatePayment from "./payments/CreatePayment.jsx";
 
 const router = createBrowserRouter([
   {
@@ -55,6 +57,8 @@ const router = createBrowserRouter([
       { path: "/super/billings/create", element: <CreateBill /> },
       { path: "/super/billings/edit/:id", element: <UpdateBill /> },
       { path: "/super/billings/:id", element: <Bill /> },
+      { path: "/super/payments", element: <Payments /> },
+      { path: "/super/payments/create/:id", element: <CreatePayment /> },
       { path: "/super/users", element: <Users /> },
       { path: "/super/users/:id", element: <User /> },
       { path: "/super/users/create", element: <CreateUser /> },

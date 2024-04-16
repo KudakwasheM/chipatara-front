@@ -74,13 +74,12 @@ const Header = ({ currentUser }) => {
             <Link to={""} className="dropdown-item d-flex align-items-center">
               <i className="bi bi-gear fs-4 me-2"></i>Account Settings
             </Link>
-            <Link
-              to={""}
+            <button
               className="dropdown-item d-flex align-items-center"
               onClick={signOut}
             >
               <i className="bi bi-escape fs-4 me-2"></i>Logout
-            </Link>
+            </button>
           </div>
         </div>
       </div>

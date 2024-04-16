@@ -164,7 +164,10 @@ const Bill = () => {
                     <button class="btn btn-outline-secondary ms-1">
                       Print
                     </button>
-                    <Link to={""} class="btn btn-primary ms-1">
+                    <Link
+                      to={`/${userInfo.role}/payments/create/${id}`}
+                      class="btn btn-primary ms-1"
+                    >
                       Pay Now
                     </Link>
                   </div>
