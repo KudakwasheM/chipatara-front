@@ -107,9 +107,9 @@ const CreatePatient = () => {
     }
   };
 
-  useEffect(() => {
-    console.log(patient);
-  }, [patient]);
+  // useEffect(() => {
+  //   console.log(patient);
+  // }, [patient]);
   return (
     <div className="app-body">
       <div className="row">

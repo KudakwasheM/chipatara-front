@@ -28,6 +28,8 @@ import UpdateBill from "./billing/UpdateBill.jsx";
 import Bill from "./billing/Bill.jsx";
 import Payments from "./payments/Payments.jsx";
 import CreatePayment from "./payments/CreatePayment.jsx";
+import NewUsers from "./users/newUsers.jsx";
+import Queue from "./queues/Queue.jsx";
 
 const router = createBrowserRouter([
   {
@@ -43,7 +45,7 @@ const router = createBrowserRouter([
     path: "/super",
     element: <MainScreen />,
     children: [
-      { path: "/super", element: <Dashboard /> },
+      { path: "/super/dashboard", element: <Dashboard /> },
       { path: "/super/patients", element: <Patients /> },
       { path: "/super/patients/:id", element: <Patient /> },
       { path: "/super/patients/create", element: <CreatePatient /> },
@@ -59,6 +61,8 @@ const router = createBrowserRouter([
       { path: "/super/billings/:id", element: <Bill /> },
       { path: "/super/payments", element: <Payments /> },
       { path: "/super/payments/create/:id", element: <CreatePayment /> },
+      { path: "/super/queues", element: <Queue /> },
+      // { path: "/super/payments/edit/:id", element: <CreatePayment /> },
       { path: "/super/users", element: <Users /> },
       { path: "/super/users/:id", element: <User /> },
       { path: "/super/users/create", element: <CreateUser /> },

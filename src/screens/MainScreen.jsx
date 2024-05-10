@@ -25,7 +25,7 @@ const MainScreen = () => {
           <ToastContainer />
           <Outlet />
           {/* <div className="app-footer">
-            <span>Chipatara &copy; 2024 || NetoProjects</span>
+            <span>Chipatara | Clinic Management &copy; 2024 NetoProjects</span>
           </div> */}
         </div>
       </div>

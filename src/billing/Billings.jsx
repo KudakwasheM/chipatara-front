@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axiosClient from "../utils/axiosClient";
+import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import CustomLoader from "../components/CustomLoader";
 
 const Billings = () => {
   const [billings, setBillings] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  const { userInfo } = useSelector((state) => state.auth);
 
   const getBills = async () => {
     setLoading(true);
@@ -59,9 +62,9 @@ const Billings = () => {
                             <tr>
                               <th>Bill Number</th>
                               <th>Patient Name</th>
-                              <th>Bill Currency</th>
-                              <th>Bill Amount</th>
-                              <th>Bill Status</th>
+                              <th>Currency</th>
+                              <th>Amount</th>
+                              <th>Status</th>
                               <th>Paid Amount</th>
                               <th>Amount Due</th>
                               <th>Status</th>
@@ -105,14 +108,14 @@ const Billings = () => {
                                   <td>
                                     <div className="d-flex flex-wrap justify-content-around">
                                       <Link
-                                        to={`/super/billings/${bill._id}`}
+                                        to={`/${userInfo.role}/billings/${bill._id}`}
                                         type="button"
                                         className="btn btn-outline-primary"
                                       >
                                         <i className="bi bi-eye m-0"></i>
                                       </Link>
                                       <Link
-                                        to={`/super/billings/edit/${bill._id}`}
+                                        to={`/${userInfo.role}/billings/edit/${bill._id}`}
                                         type="button"
                                         className="btn btn-outline-success"
                                       >

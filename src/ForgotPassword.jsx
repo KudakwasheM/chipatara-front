@@ -12,7 +12,7 @@ const ForgotPassword = () => {
                   <img
                     src="assets/images/logo.svg"
                     className="img-fluid login-logo"
-                    alt="Mercury Admin"
+                    alt="Chipatara"
                   />
                 </a>
                 <h5 className="fw-light mb-5 lh-2">

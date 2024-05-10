@@ -21,7 +21,6 @@ const Login = () => {
 
     try {
       const res = await axiosClient.post("/auth/login", { email, password });
-      console.log(res);
       dispatch(setCredentials(res.data));
     } catch (err) {
       console.log(err);
@@ -40,16 +39,16 @@ const Login = () => {
       const role = userInfo.role;
       switch (role) {
         case "super":
-          navigate("/super");
+          navigate("/super/dashboard");
           break;
         case "admin":
-          navigate("/admin");
+          navigate("/admin/dashboard");
           break;
         case "doctor":
-          navigate("/doctor");
+          navigate("/doctor/dashboard");
           break;
         case "nurse":
-          navigate("/nurse");
+          navigate("/nurse/dashboard");
           break;
         default:
           navigate("/");
@@ -68,7 +67,7 @@ const Login = () => {
                 <img
                   src="assets/images/logo.svg"
                   className="img-fluid login-logo"
-                  alt="Mercury Admin"
+                  alt="Chipatara"
                 />
               </a>
               <h5 className="fw-light mb-5">Sign in to your account.</h5>

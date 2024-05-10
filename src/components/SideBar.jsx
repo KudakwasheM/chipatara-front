@@ -5,7 +5,11 @@ const SideBar = ({ currentUser }) => {
   const location = useLocation();
 
   const isActiveTab = (path) => {
-    return location.pathname === path ? "active current-page " : "";
+    const currentPath = location.pathname;
+    if (currentPath.startsWith(path)) {
+      return "active current-page ";
+    }
+    return "";
   };
 
   return (
@@ -29,7 +33,7 @@ const SideBar = ({ currentUser }) => {
       {currentUser && (
         <div className="sidebarMenuScroll">
           <ul className="sidebar-menu">
-            <li className={isActiveTab(`/${currentUser.role}`)}>
+            <li className={isActiveTab(`/${currentUser.role}/dashboard`)}>
               <Link to="/">
                 <i className="bi bi-house-door"></i>
                 <span className="menu-text">Dashboard</span>
@@ -45,6 +49,12 @@ const SideBar = ({ currentUser }) => {
               <Link to={`/${currentUser.role}/visits`}>
                 <i className="bi bi-building-up"></i>
                 <span className="menu-text">Visits</span>
+              </Link>
+            </li>
+            <li className={isActiveTab(`/${currentUser.role}/queues`)}>
+              <Link to={`/${currentUser.role}/queues`}>
+                <i className="bi bi-clock"></i>
+                <span className="menu-text">Queue</span>
               </Link>
             </li>
             <li className={isActiveTab(`/${currentUser.role}/billings`)}>

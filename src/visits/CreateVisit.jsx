@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axiosClient from "../utils/axiosClient";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { toast } from "react-toastify";
 import CustomLoader from "../components/CustomLoader";
+import { useSelector } from "react-redux";
 
 const CreateVisit = () => {
   const { patientId } = useParams();
@@ -10,7 +11,7 @@ const CreateVisit = () => {
     symptoms: "",
     diagnosis: "",
     treatment: "",
-    patient: "",
+    patient: patientId,
     doctor: "",
     files: [],
   });
@@ -18,25 +19,9 @@ const CreateVisit = () => {
   const [patients, setPatients] = useState({});
   const [loading, setLoading] = useState(false);
 
-  const getPatients = async () => {
-    setLoading(true);
+  const navigate = useNavigate();
 
-    try {
-      const res = await axiosClient.get("/patients");
-      console.log(res.data.data);
-      setPatients(res.data.data);
-    } catch (err) {
-      console.log(err);
-      if (err.code === "ERR_BAD_RESPONSE") {
-        toast.error(err.response.data.error);
-      } else {
-        console.log(err);
-        toast.error("An error occured");
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
+  const { userInfo } = useSelector((state) => state.auth);
 
   const getPatient = async () => {
     setLoading(true);
@@ -62,9 +47,9 @@ const CreateVisit = () => {
 
     setLoading(true);
     try {
-      const res = await axiosClient.post("/visits");
+      const res = await axiosClient.post("/visits", visit);
       toast.success("Visit created successfully");
-      navigate("/super/visits");
+      navigate(`/${userInfo.role}/visits`);
     } catch (err) {
       if (err.code === "ERR_BAD_RESPONSE") {
         toast.error(err.response.data.error);
@@ -78,11 +63,7 @@ const CreateVisit = () => {
   };
 
   useEffect(() => {
-    if (patientId === undefined) {
-      getPatients();
-    } else {
-      getPatient();
-    }
+    getPatient();
   }, []);
 
   return (
@@ -149,7 +130,7 @@ const CreateVisit = () => {
                         ></textarea>
                       </div>
                     </div>
-                    <div className="col-lg-6 col-sm-6 col-12">
+                    {/* <div className="col-lg-6 col-sm-6 col-12">
                       <div className="mb-3">
                         <label className="form-label">Patient</label>
                         <select
@@ -179,7 +160,7 @@ const CreateVisit = () => {
                           )}
                         </select>
                       </div>
-                    </div>
+                    </div> */}
                   </div>
                   <div className="row">
                     <div className="col-lg-6 col-sm-6 col-12">

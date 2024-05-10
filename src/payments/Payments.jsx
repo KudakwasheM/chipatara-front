@@ -5,12 +5,86 @@ import axiosClient from "../utils/axiosClient";
 import { toast } from "react-toastify";
 import moment from "moment";
 import { Link } from "react-router-dom";
+import {
+  DatatableWrapper,
+  Filter,
+  Pagination,
+  TableBody,
+  TableHeader,
+} from "react-bs-datatable";
+import { Col, Row, Table, Button } from "react-bootstrap";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const Payments = () => {
   const [payments, setPayments] = useState([]);
   const [loading, setLoading] = useState(false);
 
   const { userInfo } = useSelector((state) => state.auth);
+
+  const headers = [
+    { title: "Receipt Number", prop: "receipt_number", isFilterable: true },
+    {
+      title: "Bill Number",
+      prop: "bill_number",
+      cell: (row) => {
+        const billNumber = row.bill.bill_number;
+        return <span>{billNumber}</span>;
+      },
+      isFilterable: true,
+    },
+    {
+      title: "Paid Amount",
+      prop: "amount",
+      cell: (row) => {
+        const paidAmount = `${row.currency}$${row.amount}`;
+        return <span>{paidAmount}</span>;
+      },
+      isFilterable: true,
+    },
+    { title: "Payment Method", prop: "payment_method" },
+    {
+      title: "Bill Amount",
+      prop: "role",
+      cell: (row) => {
+        const billAmount = `${row.bill.currency}$${row.bill_amount}`;
+        return <span>{billAmount}</span>;
+      },
+      isFilterable: true,
+    },
+    {
+      title: "Created On",
+      prop: "createdAt",
+      cell: (row) => {
+        const formattedDate = moment(row.createdAt).format("ll");
+        return <span>{formattedDate}</span>;
+      },
+    },
+    {
+      title: "Action",
+      prop: "actions",
+      cell: (row) => (
+        <div className="d-flex flex-wrap justify-content-around">
+          <Link
+            to={`/${userInfo.role}/payments/${row._id}`}
+            type="button"
+            className="btn btn-outline-primary"
+          >
+            <i className="bi bi-eye m-0"></i>
+          </Link>
+          <Link
+            to={`/${userInfo.role}/payments/edit/${row._id}`}
+            type="button"
+            className="btn btn-outline-success"
+          >
+            <i className="bi bi-pencil m-0"></i>
+          </Link>
+          <button type="button" className="btn btn-outline-danger">
+            <i className="bi bi-trash m-0"></i>
+          </button>
+        </div>
+      ),
+    },
+  ];
 
   const getPayments = async () => {
     setLoading(true);
@@ -47,123 +121,61 @@ const Payments = () => {
             ) : (
               <div className="card-body">
                 <div className="col-xxl-12">
-                  {/* <div className="d-flex flex-wrap mb-2 gap-2 justify-content-end">
-                    <Link
-                      to={`/${userInfo.role}/payments/create`}
-                      type="button"
-                      className="btn btn-outline-success"
-                    >
-                      Add New User
-                    </Link>
-                  </div> */}
-                  <div className="card shadow mb-4">
-                    <div className="card-body">
-                      <div className="table-responsive">
-                        <table className="table table-striped m-0">
-                          <thead>
-                            <tr>
-                              <th>Receipt Number</th>
-                              <th>Bill Number</th>
-                              <th>Paid Amount</th>
-                              {/* <th>Currency</th> */}
-                              <th>Payment Method</th>
-                              <th>Bill Amount</th>
-                              <th>Created On</th>
-                              <th>Actions</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {payments.map((payment) => {
-                              return (
-                                <tr>
-                                  <td>{payment.receipt_number}</td>
-                                  <td>{payment.bill.bill_number}</td>
-                                  <td>
-                                    {payment.currency}${payment.amount}
-                                  </td>
-                                  {/* <td>{payment.currency}</td> */}
-                                  <td>{payment.payment_method}</td>
-                                  <td>
-                                    {payment.bill.currency}$
-                                    {payment.bill_amount}
-                                  </td>
-                                  <td>
-                                    {moment(payment.createdAt).format("ll")}
-                                  </td>
-                                  <td>
-                                    <div className="d-flex flex-wrap justify-content-around">
-                                      <Link
-                                        to={`/${userInfo.role}/payments/${payment._id}`}
-                                        type="button"
-                                        className="btn btn-outline-primary"
-                                      >
-                                        <i className="bi bi-eye m-0"></i>
-                                      </Link>
-                                      <Link
-                                        to={`/${userInfo.role}/payments/edit/${payment._id}`}
-                                        type="button"
-                                        className="btn btn-outline-success"
-                                      >
-                                        <i className="bi bi-pencil m-0"></i>
-                                      </Link>
-                                      <button
-                                        type="button"
-                                        className="btn btn-outline-danger"
-                                      >
-                                        <i className="bi bi-trash m-0"></i>
-                                      </button>
-                                    </div>
-                                  </td>
-                                </tr>
-                              );
-                            })}
-                          </tbody>
-                        </table>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-xl-12 col-sm-12 col-12 d-flex flex-wrap justify-content-end">
+                  <DatatableWrapper
+                    body={payments}
+                    headers={headers}
+                    paginationOptionsProps={{
+                      initialState: {
+                        rowsPerPage: 10,
+                        options: [5, 10, 15, 20],
+                      },
+                    }}
+                  >
+                    <Row className="mb-2">
+                      <Col
+                        xs={6}
+                        lg={3}
+                        className="d-flex flex-col justify-content-end align-items-end"
+                      >
+                        <Filter placeholder="Search..." />
+                      </Col>
+                      <Col xs={0} lg={3}></Col>
+                      <Col xs={0} lg={3}></Col>
+                      <Col
+                        xs={6}
+                        lg={3}
+                        className="d-flex flex-col justify-content-end align-items-end"
+                      >
+                        {/* <Link
+                          to={"/super/users/create"}
+                          type="button"
+                          className="btn btn-outline-success"
+                        >
+                          Add New User
+                        </Link> */}
+                      </Col>
+                    </Row>
                     <div className="card shadow mb-4">
                       <div className="card-body">
-                        <div
-                          className="btn-toolbar d-flex flex-wrap"
-                          role="toolbar"
-                          aria-label="Toolbar with button groups"
-                        >
-                          <div
-                            className="btn-group me-2"
-                            role="group"
-                            aria-label="First group"
-                          >
-                            <button
-                              type="button"
-                              className="btn btn-outline-info"
-                            >
-                              1
-                            </button>
-                            <button
-                              type="button"
-                              className="btn btn-outline-info"
-                            >
-                              2
-                            </button>
-                            <button
-                              type="button"
-                              className="btn btn-outline-info"
-                            >
-                              3
-                            </button>
-                            <button
-                              type="button"
-                              className="btn btn-outline-info"
-                            >
-                              4
-                            </button>
-                          </div>
+                        <div className="table-responsive">
+                          <Table className="table table-striped m-0">
+                            <TableHeader />
+                            <TableBody />
+                          </Table>
                         </div>
                       </div>
                     </div>
-                  </div>
+                    <Row className="d-flex flex-col mt-2 justify-content-end">
+                      <Col
+                        xs={12}
+                        sm={6}
+                        lg={4}
+                        className="d-flex flex-col justify-content-end align-items-end"
+                      >
+                        <Pagination />
+                      </Col>
+                    </Row>
+                  </DatatableWrapper>
                 </div>
               </div>
             )}
