@@ -15,8 +15,14 @@ const CreateVisit = () => {
     doctor: "",
     files: [],
   });
-  const [prescription, setPrescription] = useState({});
+  const [prescription, setPrescription] = useState(null);
   const [patients, setPatients] = useState({});
+  const [modal, setModal] = useState(false);
+  const [rows, setRows] = useState([]);
+  const [medicine, setMedicine] = useState("");
+  const [dosage, setDosage] = useState("");
+  const [frequency, setFrequency] = useState("");
+  const [days, setDays] = useState("");
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
@@ -60,6 +66,49 @@ const CreateVisit = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const showModal = () => {
+    setModal(!modal);
+  };
+
+  const handleAddRow = () => {
+    if (medicine === "") {
+      toast.warning("Please add medicine");
+      return;
+    } else if (dosage === "") {
+      toast.warning("Please add dosage");
+      return;
+    } else if (frequency === "") {
+      toast.warning("Please add frequency");
+      return;
+    } else if (days === "") {
+      toast.warning("Please add days");
+      return;
+    }
+
+    const newRow = {
+      medicine,
+      dosage,
+      frequency,
+      days,
+    };
+
+    const updatedRows = [...rows, newRow];
+
+    setRows(updatedRows);
+    setMedicine("");
+    setDosage("");
+    setFrequency("");
+    setDays("");
+  };
+
+  const removeRow = (index) => {
+    setRows((prevRows) => {
+      const updatedRows = [...prevRows];
+      updatedRows.splice(index, 1);
+      return updatedRows;
+    });
   };
 
   useEffect(() => {
@@ -130,45 +179,200 @@ const CreateVisit = () => {
                         ></textarea>
                       </div>
                     </div>
-                    {/* <div className="col-lg-6 col-sm-6 col-12">
-                      <div className="mb-3">
-                        <label className="form-label">Patient</label>
-                        <select
-                          className="form-select"
-                          onChange={(e) =>
-                            setVisit((newVisit) => ({
-                              ...newVisit,
-                              patient: e.target.value,
-                            }))
-                          }
-                        >
-                          <option value="" selected disabled>
-                            ---Select ---
-                          </option>
-                          {patients.length > 0 ? (
-                            <>
-                              {patients.map((patient) => {
-                                return (
-                                  <option value={patient._id}>
-                                    {patient.name}
-                                  </option>
-                                );
-                              })}
-                            </>
-                          ) : (
-                            <></>
-                          )}
-                        </select>
-                      </div>
-                    </div> */}
                   </div>
-                  <div className="row">
+                  {prescription === null ? (
                     <div className="col-lg-6 col-sm-6 col-12">
                       <div className="mb-3">
-                        <button className="btn btn-outline-success">
+                        <button
+                          className="btn btn-outline-success"
+                          onClick={showModal}
+                        >
                           Add Prescription
                         </button>
                       </div>
+                    </div>
+                  ) : (
+                    <></>
+                  )}
+                  <div
+                    className={`${modal ? "" : "d-none"}`}
+                    style={{
+                      height: "100vh",
+                      width: "100vw",
+                      zIndex: 1051,
+                      position: "fixed",
+                      background: "rgba(0,0,0,0.5)",
+                      left: 0,
+                      top: 0,
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <div className="card shadow mb-4">
+                      <div className="card-header">
+                        <div className="d-flex justify-content-between">
+                          <h5 className="card-title">Add Prescription</h5>
+                          <button
+                            className="btn btn-outline-danger"
+                            onClick={showModal}
+                          >
+                            <i className="bi bi-x-lg m-0"></i>
+                          </button>
+                        </div>
+                      </div>
+                      <div className="card-body">
+                        <div className="row">
+                          <div className="col-12">
+                            <div className="table-responsive">
+                              <table className="table table-bordered">
+                                <thead>
+                                  <tr>
+                                    <th colspan="5" className="pt-3 pb-3">
+                                      <h4>Prescription</h4>
+                                    </th>
+                                  </tr>
+                                  <tr>
+                                    <th>Medicine</th>
+                                    <th>Dosage</th>
+                                    <th>Frequency</th>
+                                    <th>Days</th>
+                                    <th>Action</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {rows.map((row, index) => (
+                                    <tr key={index}>
+                                      <td>
+                                        <input
+                                          disabled
+                                          type="text"
+                                          value={row.medicine}
+                                          className="form-control"
+                                        />
+                                      </td>
+                                      <td>
+                                        <input
+                                          disabled
+                                          type="text"
+                                          value={row.dosage}
+                                          className="form-control"
+                                        />
+                                      </td>
+                                      <td>
+                                        <input
+                                          type="text"
+                                          disabled
+                                          value={row.frequency}
+                                          className="form-control"
+                                        />
+                                      </td>
+                                      <td>
+                                        <input
+                                          disabled
+                                          type="text"
+                                          value={row.days}
+                                          className="form-control"
+                                        />
+                                      </td>
+                                      <td>
+                                        <div className="d-inline-flex gap-3">
+                                          <button
+                                            className="btn btn-outline-danger"
+                                            onClick={() => {
+                                              removeRow(index);
+                                            }}
+                                          >
+                                            <i className="bi bi-trash m-0"></i>
+                                          </button>
+                                          <button className="btn btn-outline-success">
+                                            <i className="bi bi-pencil m-0"></i>
+                                          </button>
+                                        </div>
+                                      </td>
+                                    </tr>
+                                  ))}
+                                  <tr>
+                                    <td>
+                                      <input
+                                        type="text"
+                                        className="form-control"
+                                        placeholder="Medicine"
+                                        onChange={(e) =>
+                                          setMedicine(e.target.value)
+                                        }
+                                      />
+                                    </td>
+                                    <td>
+                                      <input
+                                        type="text"
+                                        className="form-control"
+                                        placeholder="Dosage"
+                                        onChange={(e) =>
+                                          setDosage(e.target.value)
+                                        }
+                                      />
+                                    </td>
+                                    <td>
+                                      <input
+                                        type="text"
+                                        className="form-control"
+                                        placeholder="Frequency"
+                                        onChange={(e) =>
+                                          setFrequency(e.target.value)
+                                        }
+                                      />
+                                    </td>
+                                    <td>
+                                      <input
+                                        type="text"
+                                        className="form-control"
+                                        placeholder="Days"
+                                        onChange={(e) =>
+                                          setDays(e.target.value)
+                                        }
+                                      />
+                                    </td>
+                                    <td>
+                                      <div className="d-inline-flex gap-3">
+                                        <button
+                                          className="btn btn-outline-success"
+                                          onClick={handleAddRow}
+                                        >
+                                          Add
+                                        </button>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+                          <div className="col-12">
+                            <div className="text-end">
+                              <button
+                                className="btn btn-outline-danger ms-1"
+                                onClick={showModal}
+                              >
+                                Cancel
+                              </button>
+                              <button
+                                className="btn btn-outline-success ms-1"
+                                onClick={() => {}}
+                              >
+                                Save as Draft
+                              </button>
+                              <button
+                                className="btn btn-success ms-1"
+                                onClick={() => {}}
+                              >
+                                Add Prescription
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="card-footer"></div>
                     </div>
                   </div>
                 </div>

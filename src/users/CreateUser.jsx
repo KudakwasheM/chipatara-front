@@ -46,7 +46,7 @@ const CreateUser = () => {
     try {
       const res = await axiosClient.post("/users", user);
       toast.success("Successfully created user");
-      navigate("/super/users");
+      navigate(`/${userInfo.role}/users`);
     } catch (err) {
       if (err.code === "ERR_BAD_RESPONSE") {
         toast.error("Internal Server Error");

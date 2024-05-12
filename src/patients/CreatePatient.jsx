@@ -93,7 +93,7 @@ const CreatePatient = () => {
     try {
       const res = await axiosClient.post("/patients", patient);
       toast.success("Successfully created patient");
-      navigate("/super/patients");
+      navigate(`/${userInfo.role}/patients`);
     } catch (err) {
       console.log(err);
       if (err.code === "ERR_BAD_RESPONSE") {

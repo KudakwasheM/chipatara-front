@@ -54,12 +54,11 @@ const UpdateUser = () => {
     try {
       const res = await axiosClient.put(`/users/${id}`, user);
       toast.success("User updated succssfully");
-      navigate("/super/users");
+      navigate(`/${userInfo.role}/users`);
     } catch (err) {
       console.log(err);
       if (err.code === "ERR_BAD_RESPONSE") {
         toast.error("Internal Server Error");
-        // navigate('/super')
       }
     } finally {
       setLoading(false);

@@ -14,7 +14,16 @@ const GuestScreen = () => {
       let role = userInfo.role;
       switch (role) {
         case "super":
-          navigate("/super");
+          navigate("/super/dashboard");
+          break;
+        case "admin":
+          navigate("/admin/dashboard");
+          break;
+        case "doctor":
+          navigate("/doctor/dashboard");
+          break;
+        case "nurse":
+          navigate("/nurse/dashboard");
           break;
         default:
           navigate("/");

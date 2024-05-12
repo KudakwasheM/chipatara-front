@@ -105,9 +105,8 @@ const CreateBill = () => {
   };
 
   const addBill = async (draft) => {
-    setLoading(true);
-
     try {
+      setLoading(true);
       let updatedBill = bill;
       if (draft) {
         updatedBill = { ...bill, draft: true };

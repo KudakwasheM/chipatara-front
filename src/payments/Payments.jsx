@@ -147,7 +147,7 @@ const Payments = () => {
                         className="d-flex flex-col justify-content-end align-items-end"
                       >
                         {/* <Link
-                          to={"/super/users/create"}
+                          to={`/${userInfo.role}/users/create`}
                           type="button"
                           className="btn btn-outline-success"
                         >

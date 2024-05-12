@@ -85,7 +85,7 @@ const UpdatePatient = () => {
     try {
       const res = await axiosClient.put(`/patients/${id}`, patient);
       toast.success("Patient updated successfully");
-      navigate("/super/patients");
+      navigate(`/${userInfo.role}/patients`);
     } catch (err) {
       if (err.code === "ERR_BAD_RESPONSE") {
         toast.error("Internal Server Error");

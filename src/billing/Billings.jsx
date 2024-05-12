@@ -47,7 +47,7 @@ const Billings = () => {
                 <div className="col-xxl-12">
                   <div className="d-flex flex-wrap mb-2 gap-2 justify-content-end">
                     <Link
-                      to={"/super/billings/create"}
+                      to={`/${userInfo.role}/billings/create`}
                       type="button"
                       className="btn btn-outline-success"
                     >

@@ -44,7 +44,7 @@ const Users = () => {
                 <div className="col-xxl-12">
                   <div className="d-flex flex-wrap mb-2 gap-2 justify-content-end">
                     <Link
-                      to={"/super/users/create"}
+                      to={`/${userInfo.role}/users/create`}
                       type="button"
                       className="btn btn-outline-success"
                     >
@@ -77,14 +77,14 @@ const Users = () => {
                                   <td>
                                     <div className="d-flex flex-wrap justify-content-around">
                                       <Link
-                                        to={`/super/users/${user._id}`}
+                                        to={`/${userInfo.role}/users/${user._id}`}
                                         type="button"
                                         className="border border-primary bg-primary text-white px-1 rounded-2"
                                       >
                                         View
                                       </Link>
                                       <Link
-                                        to={`/super/users/edit/${user._id}`}
+                                        to={`/${userInfo.role}/users/edit/${user._id}`}
                                         type="button"
                                         className="border border-success bg-success text-white px-1 rounded-2"
                                       >
