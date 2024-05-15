@@ -55,6 +55,14 @@ const CreateVisit = () => {
     try {
       const res = await axiosClient.post("/visits", visit);
       toast.success("Visit created successfully");
+      if (prescription !== null) {
+        const updatedPres = {
+          ...prescription,
+          visit: res.data.data._id,
+          patient: patientId,
+        };
+        makePrescription(updatedPres);
+      }
       navigate(`/${userInfo.role}/visits`);
     } catch (err) {
       if (err.code === "ERR_BAD_RESPONSE") {
@@ -68,7 +76,7 @@ const CreateVisit = () => {
     }
   };
 
-  const showModal = () => {
+  const handleModal = () => {
     setModal(!modal);
   };
 
@@ -111,9 +119,33 @@ const CreateVisit = () => {
     });
   };
 
+  const makePrescription = async (pres) => {
+    try {
+      const res = await axiosClient.post("/prescriptions", pres);
+      toast.success("Successfully created prescription");
+    } catch (err) {
+      if (err.response.status === 400) {
+        toast.warn(err.response.data.error);
+      } else if (err.code === "ERR_BAD_RESPONSE") {
+        toast.error("Internal Server Error");
+      } else {
+        toast.error("An error occured");
+      }
+    }
+  };
+
   useEffect(() => {
     getPatient();
   }, []);
+
+  useEffect(() => {
+    if (rows.length > 0) {
+      setPrescription((prevPres) => ({
+        ...prevPres,
+        medication: rows,
+      }));
+    }
+  }, [rows]);
 
   return (
     <div className="app-body">
@@ -185,14 +217,23 @@ const CreateVisit = () => {
                       <div className="mb-3">
                         <button
                           className="btn btn-outline-success"
-                          onClick={showModal}
+                          onClick={handleModal}
                         >
                           Add Prescription
                         </button>
                       </div>
                     </div>
                   ) : (
-                    <></>
+                    <div className="col-lg-6 col-sm-6 col-12">
+                      <div className="mb-3">
+                        <button
+                          className="btn btn-outline-info"
+                          onClick={handleModal}
+                        >
+                          Show Prescription
+                        </button>
+                      </div>
+                    </div>
                   )}
                   <div
                     className={`${modal ? "" : "d-none"}`}
@@ -201,7 +242,7 @@ const CreateVisit = () => {
                       width: "100vw",
                       zIndex: 1051,
                       position: "fixed",
-                      background: "rgba(0,0,0,0.5)",
+                      background: "rgba(0,0,0,0.85)",
                       left: 0,
                       top: 0,
                       display: "flex",
@@ -209,13 +250,13 @@ const CreateVisit = () => {
                       alignItems: "center",
                     }}
                   >
-                    <div className="card shadow mb-4">
+                    <div className="card shadow mb-4" style={{ width: "80vw" }}>
                       <div className="card-header">
                         <div className="d-flex justify-content-between">
                           <h5 className="card-title">Add Prescription</h5>
                           <button
                             className="btn btn-outline-danger"
-                            onClick={showModal}
+                            onClick={handleModal}
                           >
                             <i className="bi bi-x-lg m-0"></i>
                           </button>
@@ -298,6 +339,7 @@ const CreateVisit = () => {
                                         type="text"
                                         className="form-control"
                                         placeholder="Medicine"
+                                        value={medicine}
                                         onChange={(e) =>
                                           setMedicine(e.target.value)
                                         }
@@ -307,6 +349,7 @@ const CreateVisit = () => {
                                       <input
                                         type="text"
                                         className="form-control"
+                                        value={dosage}
                                         placeholder="Dosage"
                                         onChange={(e) =>
                                           setDosage(e.target.value)
@@ -318,6 +361,7 @@ const CreateVisit = () => {
                                         type="text"
                                         className="form-control"
                                         placeholder="Frequency"
+                                        value={frequency}
                                         onChange={(e) =>
                                           setFrequency(e.target.value)
                                         }
@@ -327,6 +371,7 @@ const CreateVisit = () => {
                                       <input
                                         type="text"
                                         className="form-control"
+                                        value={days}
                                         placeholder="Days"
                                         onChange={(e) =>
                                           setDays(e.target.value)
@@ -352,21 +397,15 @@ const CreateVisit = () => {
                             <div className="text-end">
                               <button
                                 className="btn btn-outline-danger ms-1"
-                                onClick={showModal}
+                                onClick={handleModal}
                               >
                                 Cancel
                               </button>
                               <button
-                                className="btn btn-outline-success ms-1"
-                                onClick={() => {}}
-                              >
-                                Save as Draft
-                              </button>
-                              <button
                                 className="btn btn-success ms-1"
-                                onClick={() => {}}
+                                onClick={handleModal}
                               >
-                                Add Prescription
+                                Done
                               </button>
                             </div>
                           </div>
