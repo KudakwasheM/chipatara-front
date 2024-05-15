@@ -107,12 +107,11 @@ const CreateBill = () => {
   const addBill = async (draft) => {
     try {
       setLoading(true);
-      let updatedBill = bill;
-      if (draft) {
-        updatedBill = { ...bill, draft: true };
-      } else {
-        updatedBill = { ...bill, draft: false };
-      }
+      const updatedBill = {
+        ...bill,
+        draft,
+      };
+
       const res = await axiosClient.post("/billings", updatedBill);
       toast.success("Successfully created bill");
       navigate(`/${userInfo.role}/billings`);
