@@ -30,7 +30,7 @@ const Patients = () => {
     {
       title: "Patient Name",
       prop: "name",
-      isSortable: true,
+      // isSortable: true,
       isFilterable: true,
     },
     {
