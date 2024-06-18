@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router";
 import { toast } from "react-toastify";
 import CustomLoader from "../components/CustomLoader";
 import { useSelector } from "react-redux";
+import axios from "axios";
 
 const CreateVisit = () => {
   const { patientId } = useParams();
@@ -23,6 +24,8 @@ const CreateVisit = () => {
   const [dosage, setDosage] = useState("");
   const [frequency, setFrequency] = useState("");
   const [days, setDays] = useState("");
+  const [token, setToken] = useState(null);
+  const [icdData, setIcdData] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
@@ -45,6 +48,48 @@ const CreateVisit = () => {
       }
     } finally {
       setLoading(false);
+    }
+  };
+
+  const getAccessToken = async () => {
+    try {
+      const tokenEndpoint = `${import.meta.env.ICD10_AUTHAPI}`;
+      const clientId = `${import.meta.env.IDC_10_CLIENTID}`;
+      const clientSecret = `${import.meta.env.IDC_10_SECRET}`;
+      const scope = "icdapi_access";
+
+      const tokenResponse = await axios.post(tokenEndpoint, {
+        grant_type: "client_credentials",
+        client_id: clientId,
+        client_secret: clientSecret,
+        scope: scope,
+      });
+
+      setToken(tokenResponse.data.access_token);
+      console.log(tokenResponse);
+    } catch (error) {
+      console.error("Error fetching access token:", error);
+      toast.error("Error fetching access token");
+    }
+  };
+
+  const getDiagnosis = async () => {
+    try {
+      const apiEndpoint = `${import.meta.env.ICD10_DATAAPI}`;
+      const config = {
+        headers: {
+          Accept: "application/json",
+          "Accept-Language": "en",
+          "API-Version": "v2",
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      const response = await axios.get(apiEndpoint, config);
+      console.log(response);
+      setIcdData(response.data);
+    } catch (error) {
+      console.error("Error fetching ICD-10 data:", error);
     }
   };
 
@@ -136,7 +181,14 @@ const CreateVisit = () => {
 
   useEffect(() => {
     getPatient();
+    getAccessToken();
   }, []);
+
+  useEffect(() => {
+    if (token) {
+      getDiagnosis();
+    }
+  }, [token]);
 
   useEffect(() => {
     if (rows.length > 0) {
@@ -212,7 +264,7 @@ const CreateVisit = () => {
                       </div>
                     </div>
                   </div>
-                  {prescription === null ? (
+                  {prescription === null || [] ? (
                     <div className="col-lg-6 col-sm-6 col-12">
                       <div className="mb-3">
                         <button
