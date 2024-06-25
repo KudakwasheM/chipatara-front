@@ -13,6 +13,7 @@ import {
 } from "react-bs-datatable";
 import { Col, Row, Table, Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { toast } from "react-toastify";
 
 const Users = () => {
   const [users, setUsers] = useState([]);

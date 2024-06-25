@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import axiosClient from "../utils/axiosClient";
 import moment from "moment";
 import CustomLoader from "../components/CustomLoader";
+import { toast } from "react-toastify";
 
 const Users = () => {
   const [users, setUsers] = useState([]);

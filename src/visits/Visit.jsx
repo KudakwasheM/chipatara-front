@@ -4,6 +4,7 @@ import axiosClient from "../utils/axiosClient";
 import CustomLoader from "../components/CustomLoader";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 const Visit = () => {
   const { id } = useParams();

@@ -14,9 +14,6 @@ const UpdateVisit = () => {
 
       const res = await axiosClient.get(`/visits/${id}`);
       setVisit(res.data.data);
-      if (res.data.data.message) {
-        toast.warning(res.data.data.message);
-      }
     } catch (error) {
     } finally {
       setLoading(false);
